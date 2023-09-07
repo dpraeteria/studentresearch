@@ -29,5 +29,4 @@ def find_last_page(date, max_page):
     else:
         return None
 
-
 print(find_last_page(20230907,1000))
