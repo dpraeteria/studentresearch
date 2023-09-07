@@ -3,13 +3,13 @@ import requests
 from tqdm import tqdm
 from datetime import datetime, timedelta
 from Crawling_Modules import find_last_page, extract_article, flatten_list
-import csv
 
 
 article_list = []
 date_list=[]
 start_date = datetime(2023,8,31)
 end_date = datetime(2023,9,1)
+
 
 while(start_date<=end_date):
     date_list.append(start_date.strftime("%Y%m%d"))#날짜형식 : YYYYMMDD
