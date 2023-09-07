@@ -1,15 +1,10 @@
 from bs4 import BeautifulSoup
 import requests
-import openpyxl
-from openpyxl import Workbook
-import pandas as pd
 from openpyxl.utils.dataframe import dataframe_to_rows
 from tqdm import tqdm
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 import numpy as np
 from find_page import find_last_page ###이건 다른 파이썬 파일에서 가져옴
-
-
 
 date_list=[]
 start_date = datetime(2023,8,31)
@@ -37,8 +32,6 @@ def extract_article(link):
     p_tags = soup.findAll("p")
     article = "\n".join([p.get_text() for p in p_tags])  # 각 p 태그의 텍스트를 추출하고 개행 문자로 연결
     return article        
-
-print(article_list)
 
 
 def find_links(date,page,arr):
