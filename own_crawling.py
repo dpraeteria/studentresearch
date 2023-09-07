@@ -7,14 +7,18 @@ from openpyxl.utils.dataframe import dataframe_to_rows
 from tqdm import tqdm
 from datetime import date, datetime, timedelta
 import numpy as np
-from find_page import find_last_page
-
-
 
 
 date_list=[]
 start_date = datetime(2023,8,31)
 end_date = datetime(2023,9,1)
+
+
+######헤더 너무 길어서 보기 불편해서 따로 꺼내놓음######
+header = {"User-Agent": "Mozilla/5.0"\
+    "(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "\
+    "Chrome/116.0.5845.96 Safari/537.36"}
+
 
 while(start_date<=end_date):
     date_list.append(start_date.strftime("%Y%m%d"))#날짜형식 : YYYYMMDD
@@ -23,13 +27,21 @@ while(start_date<=end_date):
 
 article_list = []
 
+
 url_parsing = lambda date,page : f"https://news.daum.net/breakingnews/economic?regDate={date}&page={page}"
+
+def extract_article(link):
+    soup = BeautifulSoup(requests.get(link, headers=header).text, "lxml")
+    p_tags = soup.findAll("p")
+    article = "\n".join([p.get_text() for p in p_tags])  # 각 p 태그의 텍스트를 추출하고 개행 문자로 연결
+    return article        
+
+print(article_list)
 
 
 def find_links(date,page,arr):
-    req_url = requests.get(url_parsing(date,page), headers={"User-Agent": "Mozilla/5.0"\
-    "(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "\
-    "Chrome/116.0.5845.96 Safari/537.36"})
+    global header
+    req_url = requests.get(url_parsing(date,page), headers=header)
     soup = BeautifulSoup(req_url.text, "lxml")
 
     for i in tqdm(range(0,15)):
@@ -39,16 +51,10 @@ def find_links(date,page,arr):
 
 for i in date_list:
     temp=[i]
-    for j in range(0,3):
+    for j in range(0,4):
         find_links(i,j+1,temp)
     article_list.append(list(set(temp)))
-"""
-#article_list를 2차원 배열로 만듦.
-전체 리스트안에 있는 각각의 리스트는 하루치의 기사의 링크를 담고 있음.
-#find_links에 배열을 변수로 받아서 거기에 기사를 추가하고
-그 리스트를 다시 article_list에 붙이는 방식임.
-#기사의 날짜를 구별하기 위해 각각의 리스트의 0번째 원소는 그 해당 기사가 작성된 날짜임
-"""
+
 
 print(article_list)
 print(np.size(article_list)) # 크롤링된 기사의 개수
