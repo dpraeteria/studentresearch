@@ -28,3 +28,6 @@ def find_last_page(date, max_page):
         return min(missing_pages)  # 최솟값 반환
     else:
         return None
+
+
+print(find_last_page(20230907,1000))
