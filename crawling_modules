@@ -37,7 +37,7 @@ def extract_article(link : str) -> str :
                 "(Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "\
                 "Chrome/116.0.5845.96 Safari/537.36"}
         soup = BeautifulSoup(requests.get(link, headers=header).text, "lxml")
-        p_tags = soup.findAll("p")
+        p_tags = soup.findAll("p",attrs={"dmcf-ptype" : "general"})
         article = "\n".join([p.get_text() for p in p_tags])  # 각 p 태그의 텍스트를 추출하고 개행 문자로 연결
         return article
 
@@ -49,5 +49,51 @@ def flatten_list(lst : list) -> list:
         else:
             result.append(item)
     return result
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
