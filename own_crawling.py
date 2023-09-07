@@ -20,9 +20,7 @@ while(start_date<=end_date):
 
 article_list = []
 
-def url_parsing(date,page):
-    url = f"https://news.daum.net/breakingnews/economic?regDate={date}&page={page}"
-    return url
+url_parsing = lambda date,page : f"https://news.daum.net/breakingnews/economic?regDate={date}&page={page}"
 
 
 def find_links(date,page,arr):
