@@ -1,9 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
-from openpyxl import Workbook
 from tqdm import tqdm
 from datetime import datetime, timedelta
-import numpy as np
 from crawling_modules import find_last_page, extract_article, flatten_list
 import csv
 
@@ -44,16 +42,6 @@ def find_links(date : int,page : int) -> list:
         article_href = article['href']
         links_array.append(article_href)
     return links_array
-    
-
-
-
-
-####링크들 리스트화
-# for i in date_list:
-#     article_daily=[i]
-#     for j in range(1,5):
-#         article_list.append(list(set(extract_article(find_links(i,j,article_daily)))))
 
 
 for date_temp in date_list:
