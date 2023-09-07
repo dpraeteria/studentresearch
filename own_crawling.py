@@ -6,6 +6,7 @@ import pandas as pd
 from openpyxl.utils.dataframe import dataframe_to_rows
 from tqdm import tqdm
 from datetime import date, datetime, timedelta
+import numpy as np
 
 
 date_list=[]
@@ -49,4 +50,4 @@ for i in date_list:
 """
 
 print(article_list)
-print(len(article_list))
+print(np.size(article_list)) # 크롤링된 기사의 개수
