@@ -4,10 +4,14 @@ from tqdm import tqdm
 from datetime import datetime, timedelta
 from crawling_modules import find_last_page, extract_article
 import csv
+import random
 
 date_list=[]
-start_date = datetime(2020,1,1)
-end_date = datetime(2023,1,1)
+start_date = datetime(2020,5,8)
+end_date = datetime(2020,5,9)
+
+num_page = 8
+article_per_page = 8
 
 f=open('article.csv','w',encoding="utf-8-sig",newline='')
 write=csv.writer(f)
@@ -35,17 +39,24 @@ def find_links(date : int,page : int) -> list:
     req_url = requests.get(url_parsing(date,page), headers=header)
     soup = BeautifulSoup(req_url.text, "lxml")
 
-    for i in range(0,15):
+    for i in range(article_per_page):
         article = soup.select_one(f"#mArticle > div.box_etc > ul > li:nth-child({i+1}) > div > strong > a")
         article_href = article['href']
         links_array.append(article_href)
     return links_array
 
 for date_temp in tqdm(date_list,desc='Days',position=0):
+    
     article_daily=[date_temp]
-    for pages in tqdm(range(1,5),desc='Pages',position=1,leave=False):#페이지별로 클롤링 및 append, range(시작페이지, 끝 페이지)
+    last_page=find_last_page(date_temp)
+    page_list=[] #랜덤으로 뽑은 페이지를 저장할 리스트
+
+    for i in range(num_page): #페이지 8개를 무작위로 뽑음(범위 :1~마지막 페이지)
+        page_list.append(random.randint(1,last_page))
+
+    for pages in tqdm(page_list,desc='Pages',position=1,leave=False):#페이지별로 클롤링 및 append, range(시작페이지, 끝 페이지)
         arr=find_links(date_temp,pages)
-        for i in tqdm(range(15),position=2,leave=False):
+        for i in tqdm(range(article_per_page),position=2,leave=False):
             article_daily.append(extract_article(arr[i]))
     write.writerow(article_daily)#일별로 기사 row 작성
 
