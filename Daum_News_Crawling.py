@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 from tqdm import tqdm
 from datetime import datetime, timedelta
-from crawling_modules import find_last_page, extract_article, flatten_list
+from crawling_modules import find_last_page, extract_article
 import csv
 
 article_list = []
@@ -22,10 +22,6 @@ header = {"User-Agent": "Mozilla/5.0"\
     "Chrome/116.0.5845.96 Safari/537.36"}
 
 
-
-
-
-
 url_parsing = lambda date,page : f"https://news.daum.net/breakingnews/economic?regDate={date}&page={page}"
 
 
@@ -36,20 +32,19 @@ def find_links(date : int,page : int) -> list:
     req_url = requests.get(url_parsing(date,page), headers=header)
     soup = BeautifulSoup(req_url.text, "lxml")
 
-    for i in tqdm(range(0,15)):
+    for i in range(0,15):
         article = soup.select_one(f"#mArticle > div.box_etc > ul > li:nth-child({i+1}) > div > strong > a")
         article_href = article['href']
         links_array.append(article_href)
     return links_array
 
-
-for date_temp in date_list:
+for date_temp in tqdm(date_list,desc='Days',position=0):
     article_daily=[date_temp]
-    for pages in tqdm(range(1,5)):
-        arr=list(set(find_links(date_temp,pages)))
-        for i in range(15):
+    for pages in tqdm(range(1,5),desc='Pages',position=1,leave=False):#페이지별로 클롤링 및 append, range(시작페이지, 끝 페이지)
+        arr=find_links(date_temp,pages)
+        for i in tqdm(range(15),position=2,leave=False):
             article_daily.append(extract_article(arr[i]))
-    article_list.append(article_daily)
+    article_list.append(article_daily)#일별로 기사 append
 
 f=open('article.csv','w',encoding="utf-8-sig",newline='')
 write=csv.writer(f)
