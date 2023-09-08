@@ -5,10 +5,13 @@ from datetime import datetime, timedelta
 from crawling_modules import find_last_page, extract_article
 import csv
 
-article_list = []
 date_list=[]
-start_date = datetime(2023,8,31)
-end_date = datetime(2023,9,1)
+start_date = datetime(2023,5,8)
+end_date = datetime(2023,5,9)
+
+f=open('article.csv','w',encoding="utf-8-sig",newline='')
+write=csv.writer(f)
+#csv 파일 실행/생성
 
 while(start_date<=end_date):
     date_list.append(start_date.strftime("%Y%m%d"))#날짜형식 : YYYYMMDD
@@ -44,11 +47,6 @@ for date_temp in tqdm(date_list,desc='Days',position=0):
         arr=find_links(date_temp,pages)
         for i in tqdm(range(15),position=2,leave=False):
             article_daily.append(extract_article(arr[i]))
-    article_list.append(article_daily)#일별로 기사 append
+    write.writerow(article_daily)#일별로 기사 row 작성
 
-f=open('article.csv','w',encoding="utf-8-sig",newline='')
-write=csv.writer(f)
-for i in range(len(date_list)):
-    write.writerow(article_list[i])
 f.close
-#뉴스 csv 파일 생성
