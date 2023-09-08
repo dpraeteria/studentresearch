@@ -3,7 +3,7 @@ import requests
 from tqdm import tqdm
 from datetime import datetime, timedelta
 from Crawling_Modules import find_last_page, extract_article, flatten_list
-
+import csv
 
 article_list = []
 date_list=[]
@@ -52,4 +52,9 @@ for date_temp in date_list:
             article_daily.append(extract_article(arr[i]))
     article_list.append(article_daily)
 
-print(article_list)
+f=open('article.csv','w',encoding="utf-8-sig",newline='')
+write=csv.writer(f)
+for i in range(len(date_list)):
+    write.writerow(article_list[i])
+f.close
+#뉴스 csv 파일 생성
