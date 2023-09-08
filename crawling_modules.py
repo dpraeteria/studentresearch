@@ -13,24 +13,13 @@ def check_page(date : int, i : int):
         return i
     return None
 
-def find_last_page(date : int, max_page : int):
-    missing_pages = []
+def find_last_page(date : int):
+    req_url = requests.get(url_parsing(20230904,1000), headers=header)
+    soup = BeautifulSoup(req_url.text, "lxml")
+    return int(soup.select(f"#mArticle > div.box_etc > div.paging_news > span.inner_paging > a.num_page")[-1].contents[0])+1
+#특정 날짜의 마지막 기사 페이지 찾는거 최적화
 
-    with ThreadPoolExecutor(max_workers=500) as executor:
-        futures = [executor.submit(lambda i: check_page(date, i), i) for i in range(max_page)]
 
-        # tqdm을 사용하여 작업 진행률 표시
-        for future in tqdm(futures, total=max_page, unit="page"):
-            result = future.result()
-            if result is not None:
-                missing_pages.append(result)
-
-    if missing_pages:
-        return min(missing_pages)  # 최솟값 반환
-    else:
-        return None
-    
-    
 ##링크에서 기사를 추출하는 함수
 def extract_article(link : str) -> str :
         header = {"User-Agent": "Mozilla/5.0"\
@@ -49,3 +38,6 @@ def flatten_list(lst : list) -> list:
         else:
             result.append(item)
     return result
+
+
+print(0)
