@@ -6,8 +6,8 @@ from crawling_modules import find_last_page, extract_article
 import csv
 
 date_list=[]
-start_date = datetime(2023,5,8)
-end_date = datetime(2023,5,9)
+start_date = datetime(2020,1,1)
+end_date = datetime(2023,1,1)
 
 f=open('article.csv','w',encoding="utf-8-sig",newline='')
 write=csv.writer(f)
