@@ -14,6 +14,9 @@ def check_page(date : int, i : int):
     return None
 
 def find_last_page(date : int):
+    """
+    날짜를 입력하면 마지막 페이지를 찾음
+    """
     req_url = requests.get(url_parsing(date,1000), headers=header)
     soup = BeautifulSoup(req_url.text, "lxml")
     return int(soup.select(f"#mArticle > div.box_etc > div.paging_news > span.inner_paging > a.num_page")[-1].contents[0])+1
