@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 from tqdm import tqdm
 from datetime import datetime, timedelta
-from crawling_modules import find_last_page, extract_article
+from Crawling_Modules import find_last_page, extract_article
 import csv
 import random
 
